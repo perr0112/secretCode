@@ -1,0 +1,116 @@
+/********************/
+/*****  fonts  ******/
+/********************/
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("../assets/fonts/HelveticaNeue.ttc");
+}
+
+/*********************/
+/******  base  *******/
+/*********************/
+
+:root {
+  /* font-sizes */
+  --context: 1240;
+  --xxl: 380rem;
+  --xl: 70rem;
+  --l: 40rem;
+  --m: 24rem;
+  --s: 20rem;
+  --xs: 12rem;
+  --header: 10rem;
+  --p: 14rem;
+  --cta: 25rem;
+  --nav: 16rem;
+  --nav-d: 16rem;
+
+  --small-p: 8rem;
+
+  --t-1: 32rem;
+  --t-3: 24rem;
+
+  --light-gap: 10rem;
+  --gap-content: 25rem;
+  --large-gap-content: 50rem;
+  --biggest-gap-content: 125rem;
+
+  --gap-section: 150rem;
+  --big-gap-section: 300rem;
+
+  --global-padding: 16rem;
+
+  /* colors */
+  --primary: #ffffff;
+  --secondary: #000000;
+  /* background */
+  --p1-light-green: #d9e9cf;
+  /* button, text, stroke,... */
+  --p1-darken-green: #4f584a;
+
+  --secondary-opacity: rgba(0, 0, 0, 0.35);
+
+  /* transitions */
+  --main-transition: cubic-bezier(0.62, 0.05, 0.01, 0.99);
+  --basic-duration: 1.2s;
+}
+
+@media screen and (max-width: 479px) {
+  :root {
+    --context: 375;
+    --xxl: 100rem;
+    --svg-xl: 84rem;
+    --xl: 36rem;
+    --l: 28rem;
+    --m: 22rem;
+    --s: 16rem;
+    --xs: 12rem;
+    --p: 12rem;
+    --cta: 20rem;
+    --nav: 28rem;
+    --nav-d: 52rem;
+
+    --t-1: 24rem;
+    --t-3: 18rem;
+  }
+}
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: calc(100vw / var(--context));
+  background-color: var(--p1-light-green);
+}
+
+body {
+    font-family: Helvetica Neue, Arial, sans-serif;
+}
+
+h1 {
+  /* font-size: var(--l) !important; */
+  font-size: var(--t-1) !important;
+}
+
+h3 {
+  /* font-size: var(--l) !important; */
+  font-size: var(--t-3) !important;
+}
+
+p, input, label, button {
+    font-size: var(--p);
+}
+
+/* container: structure */
+
+.container {}
+
+.container .col {
+    background-color: var(--primary);
+}
