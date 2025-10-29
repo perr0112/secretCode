@@ -7,79 +7,32 @@
     <link rel="stylesheet" type="text/css" href="./styles/components.css" />
     <link rel="stylesheet" type="text/css" href="./styles/normalize.css" />
     <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
-    <link rel="stylesheet" type="text/css" href="./styles/grid.css" />
   </head>
   <body>
-    <div class="grid markers" data-active="true">
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-      <div class="col-span-1"></div>
-    </div>
+    <!-- UI -->
+    <div class="background">
+      <div class="background__overlay"></div>
 
-    <div class="container">
-      <div class="grid">
-        <!-- new game with form -->
-        <div class="col col-span-8 s-col-span-4">
-          <!-- top with title -->
-          <div class="top__box">
-            <h1>Nouvelle partie</h1>
-          </div>
+      <div class="sky"></div>
 
-          <!-- form -->
-          <div class="form__box">
-            <div class="form__input">
-              <label for="pseudo">Votre pseudo</label>
-              <input
-                type="text"
-                name="pseudo"
-                id="pseudo"
-                placeholder="Saisissez votre pseudo"
-              />
-            </div>
-
-            <div class="form__input">
-              <label for="level-select">Choix de la difficulté</label>
-
-              <select name="level" id="level-select">
-                <option value="easy">Facile</option>
-                <option value="medium">Moyen</option>
-                <option value="hard">Difficile</option>
-              </select>
-            </div>
-
-            <div class="form__input">
-              <label for="pseudo">Nombre de chiffres (4 minimum)</label>
-              <input
-                type="text"
-                name="pseudo"
-                id="pseudo"
-                placeholder="Saisissez votre pseudo"
-                value="4"
-              />
-            </div>
-
-            <div class="form__actions">
-                <p class="ui-element secondary" id="timer">01:00</p>
-                <button class="ui-element primary" type="submit">Commencer</button>
-            </div>
-
-          </div>
+      <div class="grass">
+        <div class="grass grass-1">
+          <div class="hill"></div>
         </div>
 
-        <!-- leaderboard  -->
-        <div class="col col-span-4 s-none"></div>
+        <div class="grass grass-2"></div>
       </div>
     </div>
 
-    <script src="./app/index.js" type="module"></script>
+    <!-- GAME -->
+    <div class="container">
+      <div class="modal">
+        <div class="modal__content">
+
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./app/index.js"></script>
   </body>
 </html>
