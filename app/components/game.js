@@ -31,7 +31,10 @@ export const gameModalContent = `
     <p class="action" id="timer">--:--</p>
     <p class="action" id="attempts">Essais: 0</p>
   </div>
-  <button class="action" id="menuBtn">Menu</button>
+  <div style="display: flex; flex-direction: row; gap: 10rem;">
+    <button class="action" id="pauseBtn">Pause</button>
+    <button class="action" id="homeBtn">Accueil</button>
+  </div>
 </div>
 
 <div class="game__tries">
@@ -42,34 +45,38 @@ export const gameModalContent = `
 <div class="game">
   <p>Entrez votre code</p>
   <div class="game__code" id="codeInputs"></div>
+  <div class="keypad" id="keypad"></div>
 </div>
 `;
 
 export const renderGameScreen = (modal, game) => {
-  modal.innerHTML = gameModalContent
+  modal.innerHTML = gameModalContent;
 
+  // elements
   const timerEl = modal.querySelector("#timer")
   const attemptsEl = modal.querySelector("#attempts")
   const triesEl = modal.querySelector("#tries")
   const codeInputsEl = modal.querySelector("#codeInputs")
-  const menuBtn = modal.querySelector("#menuBtn")
+  const keypadEl = modal.querySelector("#keypad")
+  const pauseBtn = modal.querySelector("#pauseBtn")
+  const homeBtn = modal.querySelector("#homeBtn")
 
-  const codeLength = game.getPlayer().difficulty === "easy" ? 3 : game.getPlayer().difficulty === "medium" ? 4 : 5;
-
+  const difficulty = game.getPlayer().difficulty
+  const codeLength = difficulty === "easy" ? 3 : difficulty === "medium" ? 4 : 5;
+  let remainingTime = difficulty === "easy" ? 60 : difficulty === "medium" ? 45 : 30;
+  
   for (let i = 0; i < codeLength; i++) {
     const input = document.createElement("input");
     input.type = "text"
     input.maxLength = 1
+    input.name = "code"
     input.placeholder = "0"
     input.required = true
-  
+
     codeInputsEl.appendChild(input);
   }
 
   const inputs = Array.from(codeInputsEl.querySelectorAll("input"))
-
-  const difficulty = game.getPlayer().difficulty
-  let remainingTime = difficulty === "easy" ? 60 : difficulty === "medium" ? 45 : 30;
 
   const timer = setInterval(() => {
     remainingTime--
@@ -78,9 +85,8 @@ export const renderGameScreen = (modal, game) => {
     if (remainingTime <= 0) {
       clearInterval(timer)
 
-      // à améliorer
-      alert("Temps écoulé ⏰")
-      renderLeaderboard(modal)
+      clearInterval(timerInterval)
+      renderModalLost(game.revealCode())
     }
   }, 1000);
 
@@ -101,10 +107,6 @@ export const renderGameScreen = (modal, game) => {
     const numbersDiv = document.createElement("div");
     numbersDiv.classList.add("try__numbers");
 
-    console.log(result)
-    
-    // details:
-    // [ { value: 2, status: 'misplaced' }, { value: 5, status: 'correct' }]
     result.details.forEach((item) => {
       const numDiv = document.createElement("div")
       numDiv.classList.add("number")
@@ -118,7 +120,6 @@ export const renderGameScreen = (modal, game) => {
     attemptDiv.appendChild(numbersDiv)
     triesEl.prepend(attemptDiv)
 
-    // Victoire - affichage du classement directement
     if (result.isCorrect) {
       clearInterval(timer) // nettoyage
       setTimeout(() => renderLeaderboard(modal), 1000)
@@ -130,18 +131,109 @@ export const renderGameScreen = (modal, game) => {
 
   inputs.forEach((input, index) => {
     input.addEventListener("input", () => {
-      // focus du prochain input
-      if (input.value && index < inputs.length - 1) inputs[index + 1].focus();
+      if (input.value && index < inputs.length - 1) {
+        inputs[index + 1].focus()
+      } else if (index === inputs.length - 1 && input.value) {
+        submitGuess()
+      }
+    })
 
-      // test du code si dernier input renseigné
-      else if (index === inputs.length - 1) submitGuess();
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !input.value && index > 0) {
+        inputs[index - 1].focus()
+      }
     })
   })
 
-  menuBtn.addEventListener("click", () => {
+  // pavé numérique
+  const keys = [...Array(10).keys()];
+
+  keys.forEach((n) => {
+    console.log("=====> keypads", n)
+
+    const btn = document.createElement("button")
+    btn.textContent = n
+    btn.classList.add("keypad__key")
+
+    btn.addEventListener("click", () => {
+      const current = inputs.find((i) => i === document.activeElement)
+      const next = inputs.find((i) => !i.value)
+      const target = current || next || inputs[0]
+      target.value = n
+
+      const currentIndex = inputs.indexOf(target)
+
+      if (currentIndex < inputs.length - 1) {
+        inputs[currentIndex + 1].focus()
+      } else if (inputs.every((i) => i.value)) {
+        submitGuess()
+      }
+    })
+    keypadEl.appendChild(btn)
+  })
+
+  homeBtn.addEventListener("click", () => {
     clearInterval(timer)
     renderHome(modal)
+  })
+
+  let paused = false;
+  let timerInterval = timer
+
+  pauseBtn.addEventListener("click", () => {
+    if (!paused) {
+      paused = true
+      clearInterval(timerInterval)
+      pauseBtn.textContent = "Reprendre ▶️"
+      timerEl.style.color = "red"
+
+      // important: désactiver les input et keypad
+
+      inputs.forEach((i) => (i.disabled = true))
+      keypadEl.querySelectorAll("button").forEach((b) => (b.disabled = true))
+    } else {
+      paused = false;
+      pauseBtn.textContent = "Pause ⏸️";
+      pauseBtn.style.color = "white";
+      timerEl.style.color = "white";
+
+      inputs.forEach((i) => (i.disabled = false))
+      keypadEl.querySelectorAll("button").forEach((b) => (b.disabled = false))
+
+      timerInterval = setInterval(() => {
+        remainingTime--;
+        timerEl.textContent = `0:${remainingTime.toString().padStart(2, "0")}`;
+        if (remainingTime <= 0) {
+          clearInterval(timerInterval);
+          renderModalLost(game.revealCode());
+        }
+      }, 1000);
+    }
   });
 
+  // - focus initial
   inputs[0].focus()
+};
+
+const renderModalLost = (code) => {
+  const lostModal = document.createElement("div")
+  lostModal.classList.add("modal__lost__game")
+
+  lostModal.innerHTML = `
+    <div class="modal__lost__game--content">
+      <h3>Partie terminée</h3>
+      <div class="content__modal-lostgame">
+        <p>Le code était ${code}.</p>
+        <div style="display: flex; gap: 10rem;">
+          <button class="action" id="goHomeBtn">Accueil</button>
+          <button class="action" id="goLeaderboardBtn">Classement</button>
+        </div>
+      </div>
+    </div>
+  `
+
+  document.querySelector(".modal__content").appendChild(lostModal)
+
+  lostModal.querySelector("#goHomeBtn").addEventListener("click", () => renderHome(document.querySelector(".modal__content")))
+  lostModal.querySelector("#goLeaderboardBtn").addEventListener("click", () => renderLeaderboard(document.querySelector(".modal__content")))
 };

@@ -906,7 +906,7 @@ button.action:hover {
 }
 
 /* Modal */
-.settings-modal {
+.settings-modal, .modal__lost__game {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
@@ -918,11 +918,12 @@ button.action:hover {
   color: white;
 }
 
-.settings-modal.hidden {
+.settings-modal.hidden, .modal__lost__game.hidden {
   display: none;
 }
 
-.settings-modal__content {
+.settings-modal__content,
+.modal__lost__game--content {
   position: absolute;
   width: 50%;
   height: 50%;
@@ -949,13 +950,13 @@ button.action:hover {
   margin-bottom: var(--light-gap);
 }
 
-.settings-modal #closeSettingsModal {
+.settings-modal #closeSettingsModal, #closeModalLost {
   position: absolute;
   top: 20rem;
   right: 20rem;
 }
 
-.themes button, #closeSettingsModal {
+.themes button, #closeSettingsModal, #closeModalLost {
   flex: 1;
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -984,14 +985,11 @@ button.action:hover {
   /* font-size: var(--s) !important; */
 }
 
-.content__settings {
+.content__settings, .content__modal-lostgame {
   display: flex;
   flex-direction: column;
   gap: var(--gap-content);
 }
-
-.content__settings .setting {}
-.content__settings {}
 
 .switch {
   position: relative;
@@ -1042,4 +1040,67 @@ input:checked + .slider::before {
 
 .slider:active::before {
   width: 30px;
+}
+
+/* keypad */
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10rem;
+  margin-top: 20rem;
+}
+
+.keypad__key {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  color: white;
+  font-size: var(--s);
+  padding: 12rem;
+  cursor: pointer;
+  transition: 0.3s;
+  backdrop-filter: blur(6px);
+}
+
+.keypad__key:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.keypad__delete {
+  grid-column: span 2;
+  background: rgba(255, 120, 120, 0.3);
+}
+
+.keypad__delete:hover {
+  background: rgba(255, 120, 120, 0.5);
+}
+
+.game__code input {
+  color: black !important;
+}
+
+.modal__lost__game--content {
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  gap: var(--gap-content);
+}
+
+.modal__lost__game--content h3 {
+  font-size: var(--s);
+  margin-bottom: var(--gap-content);
+  color: white;
+}
+
+.modal__lost__game--content p {
+  font-size: var(--p);
+  margin-bottom: var(--gap-content);
+  color: white;
+}
+
+.modal__lost__game--content button {
+  flex: 1;
+  min-width: 120px;
 }
