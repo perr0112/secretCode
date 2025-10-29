@@ -11,9 +11,22 @@
   <body>
     <!-- UI -->
     <div class="background">
-      <div class="background__overlay"></div>
+      <div class="background__overlay">
+        <img src="./assets/noise-background.png" />
+      </div>
 
-      <div class="sky"></div>
+      <div class="sky">
+        <div class="sun"></div>
+
+        <!-- <div class="clouds">
+          <div class="cloud"></div>
+          <div class="cloud"></div>
+          <div class="cloud"></div>
+        </div> -->
+        <canvas id="webglCanvas"></canvas>
+      </div>
+
+      <div class="particles" id="particles"></div>
 
       <div class="grass">
         <div class="grass grass-1">
@@ -27,9 +40,43 @@
     <!-- GAME -->
     <div class="container">
       <div class="modal">
-        <div class="modal__content">
+        <div class="modal__content"></div>
+      </div>
+    </div>
+
+    <button id="settingsBtn" class="settings-btn">🎨</button>
+    <div class="settings-modal hidden">
+      
+      <div class="settings-modal__content">
+        <button class="action" id="closeSettingsModal">x</button>
+        <h3>Paramètres</h3>
+
+        <div class="content__settings">
+
+          <div class="setting">
+            <p>Choix d'un thème</p>
+            <div class="themes">
+              <button class="action" data-theme="summer">☀️ Été</button>
+              <button class="action" data-theme="autumn">🍂 Automne</button>
+              <button class="action" data-theme="winter">❄️ Hiver</button>
+              <button class="action" data-theme="spring">🌸 Printemps</button>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>Son ambiant</p>
+            <label class="switch">
+              <input type="checkbox" id="soundSwitch" />
+              <span class="slider"></span>
+            </label>
+          </div>
 
         </div>
+
+        
+        <footer class="modal-footer">
+          <p>© <span id="author-name">2025 - Clément P.</span></p>
+        </footer>
       </div>
     </div>
 
